@@ -1,5 +1,11 @@
 CXX := g++
-CXXFLAGS := -std=c++20 -Wall -Wextra -Wpedantic -Iinclude
+CXXFLAGS := -std=c++20 -Wall -Wextra -Wpedantic
+
+INCLUDE_DIRS := $(shell find include -type d)
+HEADERS := $(shell find include -type f -name '*.h')
+SOURCES := $(wildcard src/*.cpp)
+
+CXXFLAGS += $(addprefix -I,$(INCLUDE_DIRS))
 
 TARGET := build/dexr
 
@@ -7,9 +13,9 @@ TARGET := build/dexr
 
 all: $(TARGET)
 
-$(TARGET): src/main.cpp include/dexr/order.hpp
+$(TARGET): $(SOURCES) $(HEADERS)
 	mkdir -p build
-	$(CXX) $(CXXFLAGS) src/main.cpp -o $(TARGET)
+	$(CXX) $(CXXFLAGS) $(SOURCES) -o $(TARGET)
 
 run: $(TARGET)
 	./$(TARGET)
